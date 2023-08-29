@@ -1,65 +1,65 @@
-name: 卡刷包转线刷包
+名称:卡刷包转线刷包
 
-on:
-  watch:
-    types: [started]
+于：
+  观看：
+    类型：[开始]
     
-env:
-  ROM_URL: https://hugeota.d.miui.com/21.4.15/miui_ALIOTH_21.4.15_8f3a6c70dc_11.0.zip
-  ROM_Version: miui21.4.15
-  TZ: Asia/Shanghai
+环境：
+  ROM_URL ： https : //bigota.d.miui.com/V14.0.23.8.22.DEV/miui_NUWA_V14.0.23.8.22.DEV_7af7c43a24_14.0.zip
+  ROM_版本： miui23.8.22
+  TZ :亚洲/上海
 
-jobs:
-  make:
-    runs-on: ubuntu-latest
+职位：
+  制作：
+    运行： ubuntu-latest
 
-    steps:
+    步骤：
 
-    - name: install Python 3.7
-      uses: actions/setup-python@v1
-      with:
-          python-version: 3.7
-    - name: Initialization environment 
-      run: |
-        cd ~
-        sudo -E apt-get -qq update
-        sudo -E apt-get -qq install p7zip gzip
-        pip install bsdiff4
-        python -m pip install protobuf
+    -名称：安装Python 3.7
+      使用： actions/setup-python@v1
+      与：
+          python-版本：3.7
+    - name :初始化环境
+      运行：|
+        光盘~
+        sudo -E apt-get -qq 更新
+        sudo -E apt-get -qq 安装 p7zip gzip
+        pip 安装 bsdiff4
+        python -m pip 安装 protobuf
 
-    - name: Clean Up Disk Space
-      run: |
+    -名称：清理磁盘空间
+      运行：|
         docker rmi `docker images -q`
         sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
-        sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php*
-        sudo -E apt-get -y autoremove --purge
-        sudo -E apt-get clean 
+        sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* 火狐谷歌* dotnet* powershell openjdk* mysql* php*
+        sudo -E apt-get -y 自动删除 --purge
+        sudo -E apt-get clean
         
-    - name: Clone the tools source code
-      run: |
-       cd ~
-       git clone https://github.com/vm03/payload_dumper.git
-       git clone https://github.com/yyzq2/RedmiK40FastbootFlashTool.git
+    - name :克隆工具源代码
+      运行：|
+       光盘~
+       git 克隆 https://github.com/vm03/payload_dumper.git
+       git 克隆 https://github.com/yyzq2/RedmiK40FastbootFlashTool.git
   
-    - name: 下载ROM
-      run: |
-       cd ~
+    -名称：下载ROM
+      运行：|
+       光盘~
        wget -O rom.zip $ROM_URL
    
-    - name: 解压ROM
-      run: |
-       cd ~
-       unzip rom.zip -d payload_dumper
+    -名称：解压ROM
+      运行：|
+       光盘~
+       解压 rom.zip -d Payload_dumper
     
-    - name: 解包payload.bin
-      run: |
-       cd ~
-       cd payload_dumper
-       python payload_dumper.py payload.bin
+    -名称：解包payload.bin
+      运行：|
+       光盘~
+       cd 负载转储器
+       python Payload_dumper.py Payload.bin
    
-    - name: 打包为线刷包
-      run: |
-       cd ~
+    - name :资源为线路刷包
+      运行：|
+       光盘~
        mv ~/payload_dumper/output/* ~/RedmiK40FastbootFlashTool/images
        7za a -v2g -r $ROM_Version.7z ~/RedmiK40FastbootFlashTool/*
     
